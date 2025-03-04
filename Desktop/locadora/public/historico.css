@@ -1,0 +1,97 @@
+h2 {
+    color: #1e3a8a;
+    margin: 2rem 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.container {
+    background: #fcfbfb;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+}
+
+.input-group {
+    position: relative;
+}
+
+.form-control {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+#tabelaHistorico {
+    margin-top: 1.5rem;
+    --bs-table-striped-bg: #f8fafc;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#tabelaHistorico thead {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+#tabelaHistorico th {
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: none;
+}
+
+#tabelaHistorico td {
+    padding: 1.25rem;
+    vertical-align: middle;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+#tabelaHistorico tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.bx-plus-circle { color: #10b981 !important; }
+.bx-edit { color: #2563eb !important; }
+.bx-trash { color: #ef4444 !important; }
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    #tabelaHistorico {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 1000px;
+    }
+}

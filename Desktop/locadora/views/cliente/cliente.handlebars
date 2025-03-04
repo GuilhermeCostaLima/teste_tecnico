@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/public/bodycolor.css">
+
+</head>
+
+<body>
+  <div class="container mt-4">
+    <div class="top-container">
+      <a href="./clientes/novo" class="btn btn-primary btn-novo">Cadastrar novo Veículo</a>
+      <div class="filtros-container">
+        <div class="input-group">
+          <input type="text" id="filtroPlaca" class="form-control" placeholder="Filtrar por placa">
+        </div>
+        <select id="filtroMarca" class="form-control">
+          <option value="">Todas</option>
+        </select>
+        <select id="filtroProposito" class="form-control">
+          <option value="">Todos</option>
+          <option value="Uso pessoal">Uso pessoal</option>
+          <option value="Veículo para locação">Veículo para locação</option>
+          <option value="Uso da empresa">Uso da empresa</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="table" id="clientes">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Placa</th>
+            <th>Marca/Modelo</th>
+            <th>Ano</th>
+            <th>Cor</th>
+            <th>Propósito</th>
+            <th>Zero KM?</th>
+            <th>Nível de Conforto</th>
+            <th>Localização</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each listaclientes}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.placa}}</td>
+            <td>{{this.marca}} {{this.modelo}}</td>
+            <td>{{this.ano}}</td>
+            <td>{{this.cor}}</td>
+            <td>{{this.proposito}}</td>
+            <td>{{this.zeroKM}}</td>
+            <td>
+              {{#range 1 5}}
+              <i class="bx {{#if (lte this ../conforto)}}bxs-star{{else}}bx-star{{/if}}"
+                style="color: #2563eb; font-size: 1.2rem;"></i>
+              {{/range}}
+            </td>
+            <td>{{this.lat}}, {{this.long}}</td>
+            <td>
+              <div class="dots-drop">
+                <button class="dots-button">...</button>
+                <div class="dots-menu">
+                  <a href="/clientes/alterar/{{this.id}}" class="btn btn-warning"><i class="bx bx-edit"></i> Editar</a>
+                  <button class="btn btn-danger js-delete" data-id="{{this.id}}"><i class="bx bx-trash"></i>
+                    Excluir</button>
+                  <button class="btn btn-info" onclick="mostrarDetalhes({{this.id}})"><i class="bx bx-detail"></i>
+                    Detalhes</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal fade" id="meumodal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Confirmação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          Tem certeza de que deseja excluir este cliente?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="btnsim">Sim, excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
+
+
+<script>
+  //dropdown
+  document.querySelectorAll('.dots-button').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const menu = this.nextElementSibling;
+      const wasActive = menu.classList.contains('active');
+
+      document.querySelectorAll('.dots-menu').forEach(m => {
+        m.classList.remove('active');
+        m.style.zIndex = '1000';
+      });
+
+      if (!wasActive) {
+        menu.classList.add('active');
+        menu.style.zIndex = '1001';
+
+        const menuRect = menu.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        if (menuRect.bottom > viewportHeight - 50) {
+          menu.style.top = 'auto';
+          menu.style.bottom = '100%';
+          menu.style.marginTop = '0';
+          menu.style.marginBottom = '5px';
+        }
+      }
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.dots-drop')) {
+      document.querySelectorAll('.dots-menu').forEach(menu => {
+        menu.classList.remove('active');
+        menu.style.zIndex = '1000';
+        menu.style.top = '100%';
+        menu.style.bottom = 'auto';
+      });
+    }
+  });
+
+  window.addEventListener('scroll', function () {
+    document.querySelectorAll('.dots-menu.active').forEach(menu => {
+      menu.classList.remove('active');
+      menu.style.zIndex = '1000';
+    });
+  }, true);
+
+
+window.addEventListener('resize', () => {
+    document.querySelectorAll('.dots-menu.active').forEach(menu => {
+        menu.classList.remove('active');
+    });
+    
+    if(window.innerWidth >= 769) {
+        document.querySelectorAll('.navbar-collapse').forEach(menu => {
+            new bootstrap.Collapse(menu).hide();
+        });
+    }
+});
+
+document.querySelectorAll('.table-container').forEach(container => {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+    });
+
+    container.addEventListener('mouseleave', () => {
+        isDown = false;
+    });
+
+    container.addEventListener('mouseup', () => {
+        isDown = false;
+    });
+
+    container.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 2;
+        container.scrollLeft = scrollLeft - walk;
+    });
+});
+</script>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const filtroPlaca = document.getElementById("filtroPlaca");
+    const filtroMarca = document.getElementById("filtroMarca");
+    const filtroProposito = document.getElementById("filtroProposito");
+    const tabela = document.getElementById("clientes").getElementsByTagName("tbody")[0];
+
+    const marcasSet = new Set();
+    const linhas = tabela.getElementsByTagName("tr");
+
+    for (let linha of linhas) {
+      const colMarcaModelo = linha.getElementsByTagName("td")[2]?.textContent?.trim();
+      if (colMarcaModelo) {
+        const marca = colMarcaModelo.split(" ")[0];
+        marcasSet.add(marca);
+      }
+    }
+
+    marcasSet.forEach(marca => {
+      const option = document.createElement("option");
+      option.value = marca;
+      option.textContent = marca;
+      filtroMarca.appendChild(option);
+    });
+
+    function filtrarTabela() {
+      const placaValor = filtroPlaca.value.toLowerCase();
+      const marcaSelecionada = filtroMarca.value.toLowerCase();
+      const propositoSelecionado = filtroProposito.value.trim().toLowerCase();
+
+      for (let linha of linhas) {
+        const colPlaca = linha.getElementsByTagName("td")[1]?.textContent?.toLowerCase() || "";
+        const colMarcaModelo = linha.getElementsByTagName("td")[2]?.textContent?.toLowerCase() || "";
+        const colProposito = linha.getElementsByTagName("td")[5]?.textContent?.trim().toLowerCase() || "";
+
+        const marca = colMarcaModelo.split(" ")[0];
+
+        const placaMatch = !placaValor || colPlaca.includes(placaValor);
+        const marcaMatch = !marcaSelecionada || marca === marcaSelecionada;
+        const propositoMatch = !propositoSelecionado || colProposito.includes(propositoSelecionado);
+
+        linha.style.display = placaMatch && marcaMatch && propositoMatch ? "" : "none";
+      }
+    }
+
+    filtroPlaca.addEventListener("input", filtrarTabela);
+    filtroMarca.addEventListener("change", filtrarTabela);
+    filtroProposito.addEventListener("change", filtrarTabela);
+  });
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/public/site.js"></script>

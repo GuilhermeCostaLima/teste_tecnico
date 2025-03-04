@@ -1,0 +1,138 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    box-shadow: 0 2px 10px #0000001a;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-toggler {
+    z-index: 1050;
+}
+
+.navbar-collapse {
+    z-index: 1040;
+}
+
+.navbar-brand img {
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover img {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    color: #ffffffd9 !important;
+    padding: 0.75rem 1.25rem !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white !important;
+}
+
+.user-dropdown .bx-user-circle {
+    font-size: 2rem;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.user-dropdown:hover .bx-user-circle {
+    transform: scale(1.1);
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 0.5rem;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.navbar span {
+    color: #ffffffd9;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.bx-user-circle {
+    font-size: 3rem;
+    cursor: pointer;
+    color: #ffffffd9;
+}
+
+@media (max-width: 991px) {
+    .navbar-collapse {
+        position: fixed !important;
+        top: 60px !important;
+        left: 1rem !important;
+        right: 1rem !important;
+        z-index: 1030 !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(10px) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+        max-height: calc(100vh - 80px) !important;
+        overflow-y: auto !important;
+    }
+
+    main.container {
+        position: relative;
+        z-index: 1;
+        margin-top: 60px;
+    }
+
+    .nav-link {
+        color: #1e3a8a !important;
+        padding: 1rem !important;
+        margin: 0.25rem 0;
+    }
+
+    .nav-link:hover {
+        background: rgba(30, 58, 138, 0.05);
+    }
+
+    .user-dropdown .bx-user-circle {
+        color: #1e3a8a;
+    }
+
+    #detalhesVeiculo .modal-body {
+        flex-direction: column;
+    }
+
+    #mapa {
+        height: 300px;
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .navbar-brand img {
+        height: 35px;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    #mapa {
+        height: 250px;
+    }
+}

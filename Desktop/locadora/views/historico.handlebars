@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+<link rel="stylesheet" href="/public/historico.css">
+<h2>Histórico de Ações</h2>
+
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-4">
+      <label for="filtroPlacaHistorico" class="form-label">Filtrar por Placa:</label>
+      <div class="input-group">
+        <input type="text" id="filtroPlacaHistorico" class="form-control" placeholder="Digite a placa">
+      </div>
+    </div>
+  </div>
+
+  <br>
+</div>
+
+
+
+
+<table class="table" id="tabelaHistorico">
+  <thead>
+    <tr>
+      <th>Ação</th>
+      <th>Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each historico}}
+    <tr>
+      <td>
+        {{#if (eq this.tipo "Cadastrado")}}
+        <i class='bx bx-plus-circle' style="color:green; font-size: 1.5em;"></i>
+        {{/if}}
+        {{#if (eq this.tipo "Editado")}}
+        <i class='bx bx-edit' style="color:blue; font-size: 1.5em;"></i>
+        {{/if}}
+        {{#if (eq this.tipo "Deletado")}}
+        <i class='bx bx-trash' style="color:red; font-size: 1.5em;"></i>
+        {{/if}}
+      </td>
+      <td>Veículo {{this.placa}} {{this.tipo}} em {{this.dataHora}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const filtroPlacaHistorico = document.getElementById("filtroPlacaHistorico");
+    const botaoPesquisarHistorico = document.getElementById("botaoPesquisarHistorico");
+    const tabelaHistorico = document.getElementById("tabelaHistorico").getElementsByTagName("tbody")[0];
+
+    function filtrarHistorico() {
+      const placaValor = filtroPlacaHistorico.value.toLowerCase();
+      const linhas = tabelaHistorico.getElementsByTagName("tr");
+
+      for (let i = 0; i < linhas.length; i++) {
+        const colPlaca = linhas[i].getElementsByTagName("td")[1].textContent.toLowerCase();
+        const placaMatch = colPlaca.includes(placaValor);
+
+        if (placaMatch) {
+          linhas[i].style.display = "";
+        } else {
+          linhas[i].style.display = "none";
+        }
+      }
+    }
+
+    filtroPlacaHistorico.addEventListener("input", filtrarHistorico);
+    botaoPesquisarHistorico.addEventListener("click", filtrarHistorico);
+  });
+
+</script>

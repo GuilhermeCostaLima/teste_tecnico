@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="/public/cadastro.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<body>
+    <form action="/clientes/save" method="POST">
+
+        <input type="hidden" name="id" value="{{cliente.id}}">
+
+        <div class="form-group">
+            <label for="txtplaca"><b>Placa:</b></label>
+            <input type="text" class="form-control" value="{{cliente.placa}}" id="placa" name="placa" required>
+        </div>
+
+        <div class="form-group">
+            <label for="txtano"><b>Ano:</b></label>
+            <select id="year" class="form-control" value="{{cliente.ano}}" name="ano" required>
+                <script>
+                    const yearSelect = document.getElementById('year');
+                    const currentYear = new Date().getFullYear();
+                    for (let year = currentYear; year >= 1900; year--) {
+                        const option = document.createElement("option");
+                        option.value = year;
+                        option.text = year;
+                        yearSelect.appendChild(option);
+                    }
+                </script>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="txtmarca"><b>Marca:</b></label>
+            <select type="text" class="form-control" id="marca" name="marca" required>
+                <option value="Ford" {{#if (eq cliente.marca "Ford" )}}selected{{/if}}>Ford</option>
+                <option value="Chevrolet" {{#if (eq cliente.marca "Chevrolet" )}}selected{{/if}}>Chevrolet</option>
+                <option value="Volkswagen" {{#if (eq cliente.marca "Volkswagen" )}}selected{{/if}}>Volkswagen</option>
+                <option value="Fiat" {{#if (eq cliente.marca "Fiat" )}}selected{{/if}}>Fiat</option>
+                <option value="Toyota" {{#if (eq cliente.marca "Toyota" )}}selected{{/if}}>Toyota</option>
+                <option value="Jeep" {{#if (eq cliente.marca "Jeep" )}}selected{{/if}}>Jeep</option>
+                <option value="Reanaut" {{#if (eq cliente.marca "Reanaut" )}}selected{{/if}}>Reanaut</option>
+                <option value="Peugeot" {{#if (eq cliente.marca "Peugeot" )}}selected{{/if}}>Peugeot</option>
+                <option value="Hyundai" {{#if (eq cliente.marca "Hyundai" )}}selected{{/if}}>Hyundai</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="txtmodelo"><b>Modelo:</b></label>
+            <input type="text" class="form-control" value="{{cliente.modelo}}" id="modelo" name="modelo" required>
+        </div>
+
+        <div class="form-group">
+            <label for="txtcor"><b>Cor:</b></label>
+            <input type="text" class="form-control" value="{{cliente.cor}}" id="cor" name="cor" required>
+        </div>
+
+        <div class="form-group">
+            <label for="txtproposito"><b>Propósito de uso:</b></label>
+            <select type="text" class="form-control" value="{{cliente.proposito}}" id="proposito" name="proposito"
+                required>
+                <option value="Uso pessoal">Uso pessoal</option>
+                <option value="Veículo para locação">Veículo para locação</option>
+                <option value="Uso da empresa">Uso da empresa</option>
+            </select>
+
+        </div>
+
+        <div class="form-group">
+            <label for="txtzeroKM">Zero-quilômetro?</label>
+            <select name="zeroKM" value="{{cliente.zeroKM}}">
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="lat" value="{{cliente.lat}}" readonly>
+
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="long" value="{{cliente.long}}" readonly>
+
+            <button type="button" onclick="getLocation()">Obter Localização</button>
+        </div>
+
+        <label>Nível de conforto:</label>
+        <div id="star-rating">
+            {{#range 1 5}}
+            <i class="bx 
+                {{#if ../cliente.conforto}}
+                    {{#lte this (lookup ../cliente " conforto")}}bxs-star{{else}}bx-star{{/lte}} {{else}} bx-star
+                {{/if}} star" data-value="{{this}}" style="color: blue;">
+            </i>
+            {{/range}}
+            <input type="hidden" name="conforto" id="conforto-value" value="{{cliente.conforto}}">
+        </div>
+
+
+
+        <button type="submit" class="btn btn-dark">Enviar</button>
+    </form>
+</body>
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+
+                document.getElementById("latitude").value = lat;
+                document.getElementById("longitude").value = lon;
+
+                console.log("Latitude:", lat);
+                console.log("Longitude:", lon);
+            }, function (error) {
+                alert("Erro ao obter localização: " + error.message);
+            });
+        } else {
+            alert("Geolocalização não suportada pelo navegador.");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const stars = document.querySelectorAll("#star-rating .star");
+        const confortoInput = document.getElementById("conforto-value");
+
+        function atualizarEstrelas(valor) {
+            stars.forEach(s => {
+                s.classList.remove("bxs-star");
+                s.classList.add("bx-star");
+            });
+
+            for (let i = 0; i < valor; i++) {
+                stars[i].classList.add("bxs-star");
+                stars[i].classList.remove("bx-star");
+            }
+        }
+
+        stars.forEach(star => {
+            star.addEventListener("click", function () {
+                const value = this.getAttribute("data-value");
+                confortoInput.value = value;
+                atualizarEstrelas(value);
+            });
+        });
+
+        atualizarEstrelas(confortoInput.value || 0);
+    });
+</script>
+
+</html>

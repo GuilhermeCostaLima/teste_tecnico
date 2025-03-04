@@ -1,0 +1,65 @@
+body {
+    background: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    padding: 1rem;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(30, 58, 138, 0.15);
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.bg-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+}
+
+.bg-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+#chartLocacao {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin: 1rem auto;
+    max-width: 600px;
+    height: 400px;
+    position: relative;
+}
+
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+@media (max-width: 768px) {
+    #chartLocacao {
+        height: 300px;
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+}

@@ -1,0 +1,100 @@
+{{!-- conteudo --}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/public/indexhand.css">
+</head>
+
+
+<body>
+    
+ 
+
+    <div class="container mt-4">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Uso pessoal</h5>
+                        <p class="card-text display-4">1</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-white bg-success shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Para locação</h5>
+                        <p class="card-text display-4">4</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-white bg-danger shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Uso da empresa</h5>
+                        <p class="card-text display-4">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <canvas id="chartLocacao"></canvas>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('chartLocacao').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Uso pessoal', 'Para locação', 'Uso da empresa'],
+                datasets: [{
+                    data: [1, 4, 0],
+                    backgroundColor: [
+                        '#2563eb',
+                        '#10b981',
+                        '#ef4444'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 20
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: 'Segoe UI'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        bodyFont: {
+                            size: 14
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+
+</html>
